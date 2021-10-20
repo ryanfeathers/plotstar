@@ -1,6 +1,6 @@
 #download plotstar directory#
 
-wget
+wget https://github.com/ryanfeathers/plotstar.git
 
 #Make a virtual environment#
 
