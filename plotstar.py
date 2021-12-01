@@ -3,7 +3,7 @@
 Plot group numbers by location
 
 Author: Ryan Feathers jrf296
-Date: 10/19/2021
+Date: 12/01/2021
 """
 import argparse
 import starfile
@@ -31,12 +31,37 @@ particles = df['particles']
 
 if args.z == 1:
 ###3D Plot###
-	fig = px.scatter_3d(particles, x="rlnCoordinateX", y="rlnCoordinateY", \
-		z = "rlnCoordinateZ", color = args.color, size_max=1)
+	if "rlnCoordinateZ" in particles.columns:
+		fig = px.scatter_3d(particles, x="rlnCoordinateX", y="rlnCoordinateY", \
+			z = "rlnCoordinateZ", color = args.color, size_max=1)
 
-	fig.update_traces(marker={'size': 2})
+		fig.update_traces(marker={'size': 2})
+		fig.update_layout(
+			scene = dict(
+				xaxis = dict(range = [0,5760],),
+				yaxis = dict(range = [0,4092],),
+				zaxis = dict(range = [0,3000],)),
+			scene_aspectmode='manual',
+	                  scene_aspectratio=dict(x=1, y=.8, z=.6))
+		print("Plotting z=rlnCoordinateZ")
+		fig.show()
 
-	fig.show()
+	elif "rlnDefocusU" in particles.columns:
+		fig = px.scatter_3d(particles, x="rlnCoordinateX", y="rlnCoordinateY", \
+			z = "rlnDefocusU", color = args.color, size_max=1)
+
+		fig.update_traces(marker={'size': 2})
+		fig.update_layout(
+			scene = dict(
+				xaxis = dict(range = [0,5760],),
+				yaxis = dict(range = [0,4092],),
+				zaxis = dict(range = [0,20000],)),
+			scene_aspectmode='manual',
+	                  scene_aspectratio=dict(x=1, y=.8, z=.6))
+		print("Plotting z=rlnDefocusU")
+		fig.show()
+	else:
+		print("No Z value found")
 else:
 ###2D plot###
 	fig = px.scatter(particles, x="rlnCoordinateX", y="rlnCoordinateY", \
@@ -44,18 +69,5 @@ else:
 
 	fig.update_traces(marker={'size': 5})
 
+	print("Plotting in 2D")
 	fig.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
